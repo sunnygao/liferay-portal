@@ -40,7 +40,7 @@ DDMFormInstance selFormInstance = DDMFormInstanceServiceUtil.fetchFormInstance(f
 					<liferay-ui:message key="please-select-a-form-from-the-list-below" />
 				</span>
 				<span class="displaying-form-instance-id-holder <%= (selFormInstance == null) ? "hide" : StringPool.BLANK %>">
-					<liferay-ui:message key="displaying-form" />: <span class="displaying-form-instance-id"><%= (selFormInstance != null) ? HtmlUtil.unescape(selFormInstance.getName(locale)) : StringPool.BLANK %></span>
+					<liferay-ui:message key="displaying-form" />: <span class="displaying-form-instance-id"><%= (selFormInstance != null) ? HtmlUtil.escape(selFormInstance.getName(locale)) : StringPool.BLANK %></span>
 				</span>
 			</div>
 
@@ -88,7 +88,7 @@ DDMFormInstance selFormInstance = DDMFormInstanceServiceUtil.fetchFormInstance(f
 									href="<%= rowURL %>"
 									name="name"
 									orderable="<%= false %>"
-									value="<%= HtmlUtil.unescape(formInstance.getName(locale)) %>"
+									value="<%= formInstance.getName(locale) %>"
 								/>
 
 								<liferay-ui:search-container-column-text
@@ -158,16 +158,9 @@ DDMFormInstance selFormInstance = DDMFormInstanceServiceUtil.fetchFormInstance(f
 
 			var displayFormInstanceId = A.one('.displaying-form-instance-id');
 
-			if (displayFormInstanceId) {
-				var domParser = new DOMParser();
+			displayFormInstanceId.set('innerHTML', formInstanceName + ' (<liferay-ui:message key="modified" />)');
 
-				var htmlDocument = domParser.parseFromString(formInstanceName, 'text/html');
-
-				var unescapedFormInstanceName = htmlDocument.documentElement.textContent;
-
-				displayFormInstanceId.set('innerHTML', unescapedFormInstanceName + ' (<liferay-ui:message key="modified" />)');
-
-				displayFormInstanceId.addClass('modified');
+			displayFormInstanceId.addClass('modified');
 			}
 		},
 		['aui-base']
